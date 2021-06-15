@@ -4,4 +4,8 @@ class Player
         @name = name
         @marker = marker
     end
+
+    def introduce
+        puts "#{name}'s marker is #{marker}"
+    end
 end

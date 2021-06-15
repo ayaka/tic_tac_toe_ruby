@@ -2,13 +2,13 @@ require_relative "board.rb"
 
 class Game
     attr_reader :board, :players
-    def initialize(player_a, player_b)
-        @players = select_first_player([player_a, player_b])
+    def initialize
+        @players = []
+        set_players
         @board = Board.new(3, 3)
     end
 
     def play
-        announce_first_player(players[0])
         while true
             board.display_board
             selection = get_selection(players[0])
@@ -29,12 +29,28 @@ class Game
 
     private
 
-    def select_first_player(players)
-        return players.shuffle
+    def set_players
+        names = []
+        "A".upto("B") { |l| names.push(get_player_name(l)) }
+        order(names)
+
     end
 
-    def announce_first_player(player)
-        puts "The game randomly picked #{player.name} as the first player"
+    def get_player_name(letter)
+        puts "Player #{letter}, please enter your name"
+        return gets.chomp
+    end
+
+    def order(names)
+        names.shuffle!
+        players << Player.new(names[0], "O")
+        players << Player.new(names[1], "X")
+        announce_players
+    end
+
+    def announce_players
+        puts "The game randomly picked #{players[0].name} as the first player"
+        0.upto(1) { |i| players[i].introduce }
     end
 
     def get_selection(player)
